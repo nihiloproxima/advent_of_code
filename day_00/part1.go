@@ -7,6 +7,15 @@ import (
 	"strings"
 )
 
+func toInteger(str string) int {
+	intValue, err := strconv.Atoi(str)
+	if err != nil {
+		panic(err)
+	}
+
+	return intValue
+}
+
 func main() {
 	data, err := os.ReadFile("./input.txt")
 	if err != nil {
@@ -17,15 +26,8 @@ func main() {
 	sum := 0
 
 	for i := 1; i < len(arr); i++ {
-		a, err := strconv.Atoi(arr[i-1])
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		b, err := strconv.Atoi(arr[i])
-		if err != nil {
-			fmt.Println(err)
-		}
+		a := toInteger((arr[i-1]))
+		b := toInteger((arr[i]))
 
 		if b > a {
 			sum++
