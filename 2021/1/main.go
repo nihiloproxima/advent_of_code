@@ -32,18 +32,17 @@ func firstPart(arr []string) int {
 }
 
 func secondPart(arr []string) int {
-	totalIncreases := 0
+	totalIncreases := -1 // first iteration does not count
 	previous := 0
 
-	for i := 0; i < len(arr)-2; i++ {
+	for i := 2; i < len(arr); i++ {
 		a := toInteger(arr[i])
-		b := toInteger(arr[i+1])
-		c := toInteger(arr[i+2])
+		b := toInteger(arr[i-1])
+		c := toInteger(arr[i-2])
 
 		current := a + b + c
 
-		// First iteration should not count as an increase
-		if i > 0 && current > previous {
+		if current > previous {
 			totalIncreases++
 		}
 
@@ -54,7 +53,7 @@ func secondPart(arr []string) int {
 }
 
 func main() {
-	data, err := os.ReadFile("./input.txt")
+	data, err := os.ReadFile("input.txt")
 	if err != nil {
 		fmt.Println(err)
 	}
