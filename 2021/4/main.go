@@ -13,6 +13,10 @@ func toInteger(str string) int {
 		panic(err)
 	}
 
+	if intValue == 0 {
+		fmt.Println("Found a zero")
+	}
+
 	return intValue
 }
 
@@ -35,7 +39,8 @@ func parseLine(str string) []int {
 	var result []int
 	for i := 0; i < len(arr); i++ {
 		if len(arr[i]) > 0 {
-			result = append(result, toInteger(arr[i]))
+			integer := toInteger(arr[i])
+			result = append(result, integer)
 		}
 	}
 
@@ -56,18 +61,52 @@ func parseGrids(lines []string) [][][]int {
 	return grids
 }
 
+func gridIsValid(grid [][]int) bool {
+	return false
+}
+
+func findAndReplace(grid [][]int, num int) [][]int {
+	var newGrid = make([][]int, 5)
+	for i := range newGrid {
+		newGrid[i] = make([]int, 5)
+	}
+
+	// fmt.Println(len(grid), len(grid[0]))
+	// fmt.Println(grid)
+	for y := 0; y < 5; y++ {
+		for x := 0; x < 5; x++ {
+			if grid[y][x] == num {
+				newGrid[y][x] = 1000
+			} else {
+				newGrid[y][x] = grid[y][x]
+			}
+		}
+	}
+
+	return newGrid
+}
+
 func findPartOne(lines []string) int {
 	drawNumbers := parseDrawNumber(lines[0])
 	grids := parseGrids(lines)
 
-	fmt.Println("Draw numbers", drawNumbers)
-	fmt.Println("Grids", grids)
+	// fmt.Println("Draw numbers", drawNumbers)
+	// fmt.Println("Grids", grids)
+
+	for i := 0; i < len(drawNumbers); i++ {
+		for _, grid := range grids {
+			grid = findAndReplace(grid, i)
+			if gridIsValid(grid) {
+				fmt.Println("grid is valid")
+			}
+		}
+	}
 
 	return 0
 }
 
 func main() {
-	input, err := os.ReadFile("input")
+	input, err := os.ReadFile("./input")
 	if err != nil {
 		fmt.Println(err)
 	}
