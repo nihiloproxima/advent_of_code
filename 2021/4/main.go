@@ -13,15 +13,10 @@ func toInteger(str string) int {
 		panic(err)
 	}
 
-	if intValue == 0 {
-		fmt.Println("Found a zero")
-	}
-
 	return intValue
 }
 
 func parseDrawNumber(str string) []int {
-	str = str[:len(str)-1]
 	arr := strings.Split(str, ",")
 
 	var result []int
@@ -33,10 +28,10 @@ func parseDrawNumber(str string) []int {
 }
 
 func parseLine(str string) []int {
-	str = str[:len(str)-1]
 	arr := strings.Split(str, " ")
 
 	var result []int
+
 	for i := 0; i < len(arr); i++ {
 		if len(arr[i]) > 0 {
 			integer := toInteger(arr[i])
@@ -52,9 +47,8 @@ func parseGrids(lines []string) [][][]int {
 	for i := 2; i < len(lines); i += 6 {
 		var grid [][]int
 		for j := 0; j < 5; j++ {
-			grid = append(grid, parseLine(lines[i]))
+			grid = append(grid, parseLine(lines[i+j]))
 		}
-
 		grids = append(grids, grid)
 	}
 
@@ -62,7 +56,53 @@ func parseGrids(lines []string) [][][]int {
 }
 
 func gridIsValid(grid [][]int) bool {
+	for i := 0; i < 5; i++ {
+		if lineIsValid(grid[i]) {
+			return true
+		}
+		for j := 0; j < 5; j++ {
+			if colIsValid(grid, j) {
+				return true
+			}
+		}
+	}
+
 	return false
+}
+
+func lineIsValid(grid []int) bool {
+	found := 0
+	for i := 0; i < 5; i++ {
+		if grid[i] == 1000 {
+			found++
+		}
+	}
+
+	return found == 5
+}
+
+func colIsValid(grid [][]int, colPosition int) bool {
+	found := 0
+	for i := 0; i < 5; i++ {
+		if grid[i][colPosition] == 1000 {
+			found++
+		}
+	}
+
+	return found == 5
+}
+
+func soluce(grid [][]int, drawed int) int {
+	sum := 0
+	for _, line := range grid {
+		for i := 0; i < 5; i++ {
+			if line[i] != 1000 {
+				sum += line[i]
+			}
+		}
+	}
+
+	return sum * drawed
 }
 
 func findAndReplace(grid [][]int, num int) [][]int {
@@ -71,10 +111,8 @@ func findAndReplace(grid [][]int, num int) [][]int {
 		newGrid[i] = make([]int, 5)
 	}
 
-	// fmt.Println(len(grid), len(grid[0]))
-	// fmt.Println(grid)
-	for y := 0; y < 5; y++ {
-		for x := 0; x < 5; x++ {
+	for y := 0; y < len(grid); y++ {
+		for x := 0; x < len(grid[y]); x++ {
 			if grid[y][x] == num {
 				newGrid[y][x] = 1000
 			} else {
@@ -90,14 +128,11 @@ func findPartOne(lines []string) int {
 	drawNumbers := parseDrawNumber(lines[0])
 	grids := parseGrids(lines)
 
-	// fmt.Println("Draw numbers", drawNumbers)
-	// fmt.Println("Grids", grids)
-
 	for i := 0; i < len(drawNumbers); i++ {
-		for _, grid := range grids {
-			grid = findAndReplace(grid, i)
-			if gridIsValid(grid) {
-				fmt.Println("grid is valid")
+		for index, grid := range grids {
+			grids[index] = findAndReplace(grid, drawNumbers[i])
+			if gridIsValid(grids[index]) {
+				return soluce(grids[index], drawNumbers[i])
 			}
 		}
 	}
