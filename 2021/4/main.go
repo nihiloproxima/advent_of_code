@@ -26,7 +26,7 @@ func arrayContains(arr []int, value int) bool {
 	return false
 }
 
-func parseDrawNumber(str string) []int {
+func parseDrawNumbers(str string) []int {
 	arr := strings.Split(str, ",")
 
 	var result []int
@@ -80,26 +80,23 @@ func gridIsValid(grid [][]int) bool {
 	return false
 }
 
-func lineIsValid(grid []int) bool {
-	found := 0
-	for i := 0; i < 5; i++ {
-		if grid[i] == 1000 {
-			found++
+func lineIsValid(line []int) bool {
+	for _, num := range line {
+		if num != 1000 {
+			return false
 		}
 	}
 
-	return found == 5
+	return true
 }
 
-func colIsValid(grid [][]int, colPosition int) bool {
-	found := 0
-	for i := 0; i < 5; i++ {
-		if grid[i][colPosition] == 1000 {
-			found++
+func colIsValid(grid [][]int, x int) bool {
+	for _, line := range grid {
+		if line[x] != 1000 {
+			return false
 		}
 	}
-
-	return found == 5
+	return true
 }
 
 func soluce(grid [][]int, drawed int) int {
@@ -138,8 +135,7 @@ func findPartOne(grids [][][]int, drawNumbers []int) int {
 
 	for i := 0; i < len(drawNumbers); i++ {
 		for index, grid := range grids {
-			grids[index] = findAndReplace(grid, drawNumbers[i])
-			if gridIsValid(grids[index]) {
+			if grids[index] = findAndReplace(grid, drawNumbers[i]); gridIsValid(grids[index]) {
 				return soluce(grids[index], drawNumbers[i])
 			}
 		}
@@ -155,8 +151,7 @@ func findPartTwo(grids [][][]int, drawNumbers []int) int {
 	for i := 0; i < len(drawNumbers); i++ {
 		for index, grid := range grids {
 			if !gridIsValid((grids[index])) {
-				grids[index] = findAndReplace(grid, drawNumbers[i])
-				if gridIsValid(grids[index]) && !arrayContains(validGridsIndexes, index) {
+				if grids[index] = findAndReplace(grid, drawNumbers[i]); gridIsValid(grids[index]) && !arrayContains(validGridsIndexes, index) {
 					validGridsIndexes = append(validGridsIndexes, index)
 					lastValidDraw = drawNumbers[i]
 				}
@@ -175,7 +170,7 @@ func main() {
 
 	lines := strings.Split(string(input), "\n")
 
-	drawNumbers := parseDrawNumber(lines[0])
+	drawNumbers := parseDrawNumbers(lines[0])
 	grids := parseGrids(lines)
 
 	fmt.Printf("Part 1: %d\n", findPartOne(grids, drawNumbers))
