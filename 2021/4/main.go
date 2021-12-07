@@ -16,6 +16,16 @@ func toInteger(str string) int {
 	return intValue
 }
 
+func arrayContains(arr []int, value int) bool {
+	for _, e := range arr {
+		if e == value {
+			return true
+		}
+	}
+
+	return false
+}
+
 func parseDrawNumber(str string) []int {
 	arr := strings.Split(str, ",")
 
@@ -124,9 +134,7 @@ func findAndReplace(grid [][]int, num int) [][]int {
 	return newGrid
 }
 
-func findPartOne(lines []string) int {
-	drawNumbers := parseDrawNumber(lines[0])
-	grids := parseGrids(lines)
+func findPartOne(grids [][][]int, drawNumbers []int) int {
 
 	for i := 0; i < len(drawNumbers); i++ {
 		for index, grid := range grids {
@@ -140,6 +148,25 @@ func findPartOne(lines []string) int {
 	return 0
 }
 
+func findPartTwo(grids [][][]int, drawNumbers []int) int {
+	var validGridsIndexes []int
+	var lastValidDraw int
+
+	for i := 0; i < len(drawNumbers); i++ {
+		for index, grid := range grids {
+			if !gridIsValid((grids[index])) {
+				grids[index] = findAndReplace(grid, drawNumbers[i])
+				if gridIsValid(grids[index]) && !arrayContains(validGridsIndexes, index) {
+					validGridsIndexes = append(validGridsIndexes, index)
+					lastValidDraw = drawNumbers[i]
+				}
+			}
+		}
+	}
+
+	return soluce(grids[validGridsIndexes[len(validGridsIndexes)-1]], lastValidDraw)
+}
+
 func main() {
 	input, err := os.ReadFile("./input")
 	if err != nil {
@@ -148,5 +175,9 @@ func main() {
 
 	lines := strings.Split(string(input), "\n")
 
-	fmt.Printf("Part 1: %d\n", findPartOne(lines))
+	drawNumbers := parseDrawNumber(lines[0])
+	grids := parseGrids(lines)
+
+	fmt.Printf("Part 1: %d\n", findPartOne(grids, drawNumbers))
+	fmt.Printf("Part 2: %d\n", findPartTwo(grids, drawNumbers))
 }
