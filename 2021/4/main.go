@@ -26,12 +26,13 @@ func arrayContains(arr []int, value int) bool {
 	return false
 }
 
-func parseDrawNumbers(str string) []int {
-	arr := strings.Split(str, ",")
+func parseRolls(line string) []int {
+	rolls := strings.Split(line, ",")
 
 	var result []int
-	for i := 0; i < len(arr); i++ {
-		result = append(result, toInteger(arr[i]))
+	for _, roll := range rolls {
+		result = append(result, toInteger(roll))
+
 	}
 
 	return result
@@ -42,10 +43,9 @@ func parseLine(str string) []int {
 
 	var result []int
 
-	for i := 0; i < len(arr); i++ {
-		if len(arr[i]) > 0 {
-			integer := toInteger(arr[i])
-			result = append(result, integer)
+	for _, e := range arr {
+		if len(e) > 0 {
+			result = append(result, toInteger(e))
 		}
 	}
 
@@ -54,7 +54,8 @@ func parseLine(str string) []int {
 
 func parseGrids(lines []string) [][][]int {
 	var grids [][][]int
-	for i := 2; i < len(lines); i += 6 {
+
+	for i := 0; i < len(lines); i += 6 {
 		var grid [][]int
 		for j := 0; j < 5; j++ {
 			grid = append(grid, parseLine(lines[i+j]))
@@ -67,20 +68,15 @@ func parseGrids(lines []string) [][][]int {
 
 func gridIsValid(grid [][]int) bool {
 	for i := 0; i < 5; i++ {
-		if lineIsValid(grid[i]) {
+		if horizontallyValid(grid[i]) || verticallyCorrect(grid, i) {
 			return true
-		}
-		for j := 0; j < 5; j++ {
-			if colIsValid(grid, j) {
-				return true
-			}
 		}
 	}
 
 	return false
 }
 
-func lineIsValid(line []int) bool {
+func horizontallyValid(line []int) bool {
 	for _, num := range line {
 		if num != 1000 {
 			return false
@@ -90,7 +86,7 @@ func lineIsValid(line []int) bool {
 	return true
 }
 
-func colIsValid(grid [][]int, x int) bool {
+func verticallyCorrect(grid [][]int, x int) bool {
 	for _, line := range grid {
 		if line[x] != 1000 {
 			return false
@@ -99,17 +95,17 @@ func colIsValid(grid [][]int, x int) bool {
 	return true
 }
 
-func soluce(grid [][]int, drawed int) int {
+func computeScore(grid [][]int, roll int) int {
 	sum := 0
 	for _, line := range grid {
-		for i := 0; i < 5; i++ {
-			if line[i] != 1000 {
-				sum += line[i]
+		for _, num := range line {
+			if num != 1000 {
+				sum += num
 			}
 		}
 	}
 
-	return sum * drawed
+	return sum * roll
 }
 
 func findAndReplace(grid [][]int, num int) [][]int {
@@ -131,12 +127,11 @@ func findAndReplace(grid [][]int, num int) [][]int {
 	return newGrid
 }
 
-func findPartOne(grids [][][]int, drawNumbers []int) int {
-
-	for i := 0; i < len(drawNumbers); i++ {
+func findPartOne(grids [][][]int, rolls []int) int {
+	for _, roll := range rolls {
 		for index, grid := range grids {
-			if grids[index] = findAndReplace(grid, drawNumbers[i]); gridIsValid(grids[index]) {
-				return soluce(grids[index], drawNumbers[i])
+			if grids[index] = findAndReplace(grid, roll); gridIsValid(grids[index]) {
+				return computeScore(grids[index], roll)
 			}
 		}
 	}
@@ -144,22 +139,22 @@ func findPartOne(grids [][][]int, drawNumbers []int) int {
 	return 0
 }
 
-func findPartTwo(grids [][][]int, drawNumbers []int) int {
+func findPartTwo(grids [][][]int, rolls []int) int {
 	var validGridsIndexes []int
-	var lastValidDraw int
+	var lastRoll int
 
-	for i := 0; i < len(drawNumbers); i++ {
+	for _, roll := range rolls {
 		for index, grid := range grids {
 			if !gridIsValid((grids[index])) {
-				if grids[index] = findAndReplace(grid, drawNumbers[i]); gridIsValid(grids[index]) && !arrayContains(validGridsIndexes, index) {
+				if grids[index] = findAndReplace(grid, roll); gridIsValid(grids[index]) && !arrayContains(validGridsIndexes, index) {
 					validGridsIndexes = append(validGridsIndexes, index)
-					lastValidDraw = drawNumbers[i]
+					lastRoll = roll
 				}
 			}
 		}
 	}
 
-	return soluce(grids[validGridsIndexes[len(validGridsIndexes)-1]], lastValidDraw)
+	return computeScore(grids[validGridsIndexes[len(validGridsIndexes)-1]], lastRoll)
 }
 
 func main() {
@@ -169,10 +164,9 @@ func main() {
 	}
 
 	lines := strings.Split(string(input), "\n")
+	rolls := parseRolls(lines[0])
+	grids := parseGrids(lines[2:])
 
-	drawNumbers := parseDrawNumbers(lines[0])
-	grids := parseGrids(lines)
-
-	fmt.Printf("Part 1: %d\n", findPartOne(grids, drawNumbers))
-	fmt.Printf("Part 2: %d\n", findPartTwo(grids, drawNumbers))
+	fmt.Printf("Part 1: %d\n", findPartOne(grids, rolls))
+	fmt.Printf("Part 2: %d\n", findPartTwo(grids, rolls))
 }
