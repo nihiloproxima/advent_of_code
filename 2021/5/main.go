@@ -127,9 +127,9 @@ func countOverlaps(grid [][]int) int {
 }
 
 func resolve(lines []string, withDiagonals bool) int {
-	grid := make([][]int, 10)
+	grid := make([][]int, 1000)
 	for i := range grid {
-		grid[i] = make([]int, 10)
+		grid[i] = make([]int, 1000)
 	}
 
 	for _, line := range lines {
@@ -150,10 +150,6 @@ func main() {
 	}
 
 	lines := strings.Split(string(input), "\n")
-
-	for line := range lines {
-		fmt.Println(lines[line])
-	}
 
 	fmt.Printf("Part 1: %d\n", resolve(lines, false))
 	fmt.Printf("Part 2: %d\n", resolve(lines, true))
