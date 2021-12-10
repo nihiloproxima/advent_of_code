@@ -56,8 +56,6 @@ func getPoints(line string, withDiagonals bool) []point {
 		xDirection = "backward"
 	}
 
-	// fmt.Println(desc, lineDirection, xDirection, yDirection)
-
 	var points []point
 	if lineDirection == "horizontal" {
 		if xDirection == "forward" {
@@ -129,15 +127,9 @@ func countOverlaps(grid [][]int) int {
 }
 
 func resolve(lines []string, withDiagonals bool) int {
-	grid := make([][]int, 1000)
+	grid := make([][]int, 10)
 	for i := range grid {
-		grid[i] = make([]int, 1000)
-	}
-
-	for i := 0; i < 10; i++ {
-		for j := 0; j < 10; j++ {
-			grid[i] = append(grid[i], 0)
-		}
+		grid[i] = make([]int, 10)
 	}
 
 	for _, line := range lines {
@@ -158,6 +150,10 @@ func main() {
 	}
 
 	lines := strings.Split(string(input), "\n")
+
+	for line := range lines {
+		fmt.Println(lines[line])
+	}
 
 	fmt.Printf("Part 1: %d\n", resolve(lines, false))
 	fmt.Printf("Part 2: %d\n", resolve(lines, true))
