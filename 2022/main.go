@@ -18,9 +18,17 @@ func main() {
 
 	switch day {
 	case "1":
-		fmt.Println("Day 01")
-		fmt.Println("Part 1:", day01.PartOne())
-		fmt.Println("Part 2:", day01.PartTwo())
+		partOne, err := day01.PartOne()
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("Day 01 - Part 1:", partOne)
+
+		partTwo, err := day01.PartTwo()
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("Day 01 - Part 2:", partTwo)
 	default:
 		fmt.Println("Day not found")
 	}
