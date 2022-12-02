@@ -1,9 +1,7 @@
-package main
+package day05
 
 import (
-	"fmt"
-	"os"
-	"strconv"
+	"aoc_2021/utils"
 	"strings"
 )
 
@@ -19,15 +17,6 @@ type point struct {
 	y int
 }
 
-func toInteger(str string) int {
-	intValue, err := strconv.Atoi(str)
-	if err != nil {
-		panic(err)
-	}
-
-	return intValue
-}
-
 func getLineDirection(desc description) string {
 	if desc.startX != desc.endX && desc.startY != desc.endY {
 		return "diagonal"
@@ -36,17 +25,16 @@ func getLineDirection(desc description) string {
 	} else {
 		return "vertical"
 	}
-
 }
 
 func getPoints(line string, withDiagonals bool) []point {
 	segments := strings.Split(line, " -> ")
 
 	var desc description = description{
-		startX: toInteger(strings.Split(segments[0], ",")[0]),
-		startY: toInteger(strings.Split(segments[0], ",")[1]),
-		endX:   toInteger(strings.Split(segments[1], ",")[0]),
-		endY:   toInteger(strings.Split(segments[1], ",")[1]),
+		startX: utils.ToInteger(strings.Split(segments[0], ",")[0]),
+		startY: utils.ToInteger(strings.Split(segments[0], ",")[1]),
+		endX:   utils.ToInteger(strings.Split(segments[1], ",")[0]),
+		endY:   utils.ToInteger(strings.Split(segments[1], ",")[1]),
 	}
 
 	lineDirection := getLineDirection(desc)
@@ -143,14 +131,6 @@ func resolve(lines []string, withDiagonals bool) int {
 	return countOverlaps(grid)
 }
 
-func main() {
-	input, err := os.ReadFile("./input")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	lines := strings.Split(string(input), "\n")
-
-	fmt.Printf("Part 1: %d\n", resolve(lines, false))
-	fmt.Printf("Part 2: %d\n", resolve(lines, true))
+func PartOne(data []string) int {
+	return resolve(data, false)
 }

@@ -4,12 +4,7 @@ import (
 	"aoc_2022/utils"
 )
 
-func PartOne() (int, error) {
-	data, err := utils.ParseFile("./day_01/data")
-	if err != nil {
-		return 0, err
-	}
-
+func PartOne(data []string) int {
 	inventories := []int{}
 	tmp := 0
 	max := 0
@@ -28,5 +23,5 @@ func PartOne() (int, error) {
 		}
 	}
 
-	return max, nil
+	return max
 }

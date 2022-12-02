@@ -1,7 +1,9 @@
 package main
 
 import (
-	day01 "aoc_2022/day_01"
+	"aoc_2022/day01"
+	"aoc_2022/day02"
+	"aoc_2022/utils"
 	"fmt"
 	"os"
 )
@@ -18,17 +20,13 @@ func main() {
 
 	switch day {
 	case "1":
-		partOne, err := day01.PartOne()
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println("Day 01 - Part 1:", partOne)
-
-		partTwo, err := day01.PartTwo()
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println("Day 01 - Part 2:", partTwo)
+		data := utils.ParseFile("day01/data")
+		fmt.Println("Day 01 - Part 1:", day01.PartOne(data))
+		fmt.Println("Day 01 - Part 2:", day01.PartTwo(data))
+	case "2":
+		data := utils.ParseFile("day02/data")
+		fmt.Println("Day 02 - Part 1:", day02.PartOne(data))
+		fmt.Println("Day 02 - Part 2:", day02.PartTwo(data))
 	default:
 		fmt.Println("Day not found")
 	}

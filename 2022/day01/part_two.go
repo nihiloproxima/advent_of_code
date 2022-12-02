@@ -5,12 +5,7 @@ import (
 	"sort"
 )
 
-func PartTwo() (int, error) {
-	data, err := utils.ParseFile("./day_01/data")
-	if err != nil {
-		return 0, err
-	}
-
+func PartTwo(data []string) int {
 	inventories := []int{}
 	tmp := 0
 
@@ -32,5 +27,5 @@ func PartTwo() (int, error) {
 		sum += n
 	}
 
-	return sum, nil
+	return sum
 }

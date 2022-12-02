@@ -1,20 +1,8 @@
-package main
+package day06
 
 import (
-	"fmt"
-	"os"
-	"strconv"
-	"strings"
+	"aoc_2021/utils"
 )
-
-func toInteger(str string) int {
-	intValue, err := strconv.Atoi(str)
-	if err != nil {
-		panic(err)
-	}
-
-	return intValue
-}
 
 func resolve(fishs []int, days int) int {
 	ages := [9]int{0, 0, 0, 0, 0, 0, 0, 0, 0}
@@ -54,18 +42,11 @@ func resolve(fishs []int, days int) int {
 	return sum
 }
 
-func main() {
-	input, err := os.ReadFile("./input")
-	if err != nil {
-		fmt.Println(err)
-	}
-	str := strings.Split(string(input), ",")
-
+func PartOne(data []string) int {
 	var firstGen []int
-	for _, e := range str {
-		firstGen = append(firstGen, toInteger(e))
+	for _, e := range data {
+		firstGen = append(firstGen, utils.ToInteger(e))
 	}
 
-	fmt.Printf("Part 1: %d\n", resolve(firstGen, 80))
-	fmt.Printf("Part 2: %d\n", resolve(firstGen, 256))
+	return resolve(firstGen, 80)
 }

@@ -1,37 +1,16 @@
-package main
+package day04
 
 import (
-	"fmt"
-	"os"
-	"strconv"
+	"aoc_2021/utils"
 	"strings"
 )
-
-func toInteger(str string) int {
-	intValue, err := strconv.Atoi(str)
-	if err != nil {
-		panic(err)
-	}
-
-	return intValue
-}
-
-func arrayContains(arr []int, value int) bool {
-	for _, e := range arr {
-		if e == value {
-			return true
-		}
-	}
-
-	return false
-}
 
 func parseRolls(line string) []int {
 	rolls := strings.Split(line, ",")
 
 	var result []int
 	for _, roll := range rolls {
-		result = append(result, toInteger(roll))
+		result = append(result, utils.ToInteger(roll))
 
 	}
 
@@ -45,7 +24,7 @@ func parseLine(str string) []int {
 
 	for _, e := range arr {
 		if len(e) > 0 {
-			result = append(result, toInteger(e))
+			result = append(result, utils.ToInteger(e))
 		}
 	}
 
@@ -127,7 +106,10 @@ func findAndReplace(grid [][]int, num int) [][]int {
 	return newGrid
 }
 
-func findPartOne(grids [][][]int, rolls []int) int {
+func PartOne(data []string) int {
+	rolls := parseRolls(data[0])
+	grids := parseGrids(data[2:])
+
 	for _, roll := range rolls {
 		for index, grid := range grids {
 			if grids[index] = findAndReplace(grid, roll); gridIsValid(grids[index]) {
@@ -137,36 +119,4 @@ func findPartOne(grids [][][]int, rolls []int) int {
 	}
 
 	return 0
-}
-
-func findPartTwo(grids [][][]int, rolls []int) int {
-	var validGridsIndexes []int
-	var lastRoll int
-
-	for _, roll := range rolls {
-		for index, grid := range grids {
-			if !gridIsValid((grids[index])) {
-				if grids[index] = findAndReplace(grid, roll); gridIsValid(grids[index]) && !arrayContains(validGridsIndexes, index) {
-					validGridsIndexes = append(validGridsIndexes, index)
-					lastRoll = roll
-				}
-			}
-		}
-	}
-
-	return computeScore(grids[validGridsIndexes[len(validGridsIndexes)-1]], lastRoll)
-}
-
-func main() {
-	input, err := os.ReadFile("./input")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	lines := strings.Split(string(input), "\n")
-	rolls := parseRolls(lines[0])
-	grids := parseGrids(lines[2:])
-
-	fmt.Printf("Part 1: %d\n", findPartOne(grids, rolls))
-	fmt.Printf("Part 2: %d\n", findPartTwo(grids, rolls))
 }
